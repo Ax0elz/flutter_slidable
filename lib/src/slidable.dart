@@ -29,13 +29,18 @@ class Slidable extends StatefulWidget {
     this.dragStartBehavior = DragStartBehavior.down,
     this.useTextDirection = true,
     this.spaceBetweenContentAndActionPane,
+    this.padding,
     required this.child,
   }) : super(key: key);
 
   /// The Slidable widget controller.
   final SlidableController? controller;
 
+  /// The space between the content and the action pane.
   final double? spaceBetweenContentAndActionPane;
+
+  /// The padding of the slidable and the child widget it wraps
+  final EdgeInsets? padding;
 
   /// Whether this slidable is interactive.
   ///
@@ -272,6 +277,10 @@ class _SlidableState extends State<Slidable>
       children: <Widget>[
         if (actionPane != null)
           Positioned.fill(
+            left: widget.padding?.left,
+            top: widget.padding?.top,
+            right: widget.padding?.right,
+            bottom: widget.padding?.bottom,
             child: ClipRect(
               clipper: _SlidableClipper(
                 axis: widget.direction,
@@ -280,7 +289,10 @@ class _SlidableState extends State<Slidable>
               child: actionPane,
             ),
           ),
-        content,
+        Padding(
+          padding: widget.padding ?? EdgeInsets.zero,
+          child: content,
+        ),
       ],
     );
 
