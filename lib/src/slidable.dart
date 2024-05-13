@@ -28,11 +28,14 @@ class Slidable extends StatefulWidget {
     this.direction = Axis.horizontal,
     this.dragStartBehavior = DragStartBehavior.down,
     this.useTextDirection = true,
+    this.spaceBetweenContentAndActionPane,
     required this.child,
   }) : super(key: key);
 
   /// The Slidable widget controller.
   final SlidableController? controller;
+
+  final double? spaceBetweenContentAndActionPane;
 
   /// Whether this slidable is interactive.
   ///
@@ -290,7 +293,19 @@ class _SlidableState extends State<Slidable>
                   controller.actionPaneType.value == ActionPaneType.start,
               child: _SlidableControllerScope(
                 controller: controller,
-                child: content,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right:
+                        controller.actionPaneType.value == ActionPaneType.start
+                            ? 0
+                            : widget.spaceBetweenContentAndActionPane ?? 0,
+                    left:
+                        controller.actionPaneType.value == ActionPaneType.start
+                            ? widget.spaceBetweenContentAndActionPane ?? 0
+                            : 0,
+                  ),
+                  child: content,
+                ),
               ),
             ),
           ),
