@@ -265,22 +265,22 @@ class _SlidableState extends State<Slidable>
                 axis: widget.direction,
                 controller: controller,
               ),
-              child: actionPane,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  right: controller.startActionPaneExtentRatio > 0 &&
+                          controller.direction.value.abs() > 0
+                      ? widget.spaceBetweenContentAndActionPane ?? 0
+                      : 0,
+                  left: controller.endActionPaneExtentRatio > 0 &&
+                          controller.direction.value.abs() > 0
+                      ? widget.spaceBetweenContentAndActionPane ?? 0
+                      : 0,
+                ),
+                child: actionPane,
+              ),
             ),
           ),
-        Padding(
-          padding: EdgeInsets.only(
-            left: controller.startActionPaneExtentRatio > 0 &&
-                    controller.direction.value.abs() > 0
-                ? widget.spaceBetweenContentAndActionPane ?? 0
-                : 0,
-            right: controller.endActionPaneExtentRatio > 0 &&
-                    controller.direction.value.abs() > 0
-                ? widget.spaceBetweenContentAndActionPane ?? 0
-                : 0,
-          ),
-          child: content,
-        ),
+        content,
       ],
     );
 
