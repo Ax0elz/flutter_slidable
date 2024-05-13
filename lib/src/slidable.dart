@@ -274,8 +274,6 @@ class _SlidableState extends State<Slidable>
           Positioned.fill(
             child: ClipRect(
               clipper: _SlidableClipper(
-                spaceBetweenContentAndActionPane:
-                    widget.spaceBetweenContentAndActionPane,
                 axis: widget.direction,
                 controller: controller,
               ),
@@ -336,19 +334,16 @@ class _SlidableClipper extends CustomClipper<Rect> {
   _SlidableClipper({
     required this.axis,
     required this.controller,
-    this.spaceBetweenContentAndActionPane,
   }) : super(reclip: controller.animation);
 
   final Axis axis;
   final SlidableController controller;
-  final double? spaceBetweenContentAndActionPane;
 
   @override
   Rect getClip(Size size) {
     switch (axis) {
       case Axis.horizontal:
-        final double offset = controller.ratio * size.width +
-            (spaceBetweenContentAndActionPane ?? 0);
+        final double offset = controller.ratio * size.width;
         if (offset < 0) {
           return Rect.fromLTRB(size.width + offset, 0, size.width, size.height);
         }
