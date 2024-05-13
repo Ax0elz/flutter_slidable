@@ -252,7 +252,19 @@ class _SlidableState extends State<Slidable>
       child: SlidableAutoCloseBehaviorInteractor(
         groupTag: widget.groupTag,
         controller: controller,
-        child: widget.child,
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: controller.startActionPaneExtentRatio > 0 &&
+                    controller.direction.value.abs() > 0
+                ? widget.spaceBetweenContentAndActionPane ?? 0
+                : 0,
+            left: controller.endActionPaneExtentRatio > 0 &&
+                    controller.direction.value.abs() > 0
+                ? widget.spaceBetweenContentAndActionPane ?? 0
+                : 0,
+          ),
+          child: widget.child,
+        ),
       ),
     );
 
@@ -262,8 +274,6 @@ class _SlidableState extends State<Slidable>
           Positioned.fill(
             child: ClipRect(
               clipper: _SlidableClipper(
-                spaceBetweenContentAndActionPane:
-                    widget.spaceBetweenContentAndActionPane,
                 axis: widget.direction,
                 controller: controller,
               ),
@@ -324,12 +334,10 @@ class _SlidableClipper extends CustomClipper<Rect> {
   _SlidableClipper({
     required this.axis,
     required this.controller,
-    this.spaceBetweenContentAndActionPane,
   }) : super(reclip: controller.animation);
 
   final Axis axis;
   final SlidableController controller;
-  final double? spaceBetweenContentAndActionPane;
 
   @override
   Rect getClip(Size size) {
@@ -337,35 +345,20 @@ class _SlidableClipper extends CustomClipper<Rect> {
       case Axis.horizontal:
         final double offset = controller.ratio * size.width;
         if (offset < 0) {
-          return Rect.fromLTRB(
-            size.width + offset - (spaceBetweenContentAndActionPane ?? 0),
-            0,
-            size.width,
-            size.height,
-          );
+          return Rect.fromLTRB(size.width + offset, 0, size.width, size.height);
         }
-        return Rect.fromLTRB(
-          0,
-          0,
-          offset + (spaceBetweenContentAndActionPane ?? 0),
-          size.height,
-        );
+        return Rect.fromLTRB(0, 0, offset, size.height);
       case Axis.vertical:
         final double offset = controller.ratio * size.height;
         if (offset < 0) {
           return Rect.fromLTRB(
             0,
-            size.height + offset - (spaceBetweenContentAndActionPane ?? 0),
+            size.height + offset,
             size.width,
             size.height,
           );
         }
-        return Rect.fromLTRB(
-          0,
-          0,
-          size.width,
-          offset + (spaceBetweenContentAndActionPane ?? 0),
-        );
+        return Rect.fromLTRB(0, 0, size.width, offset);
     }
   }
 
