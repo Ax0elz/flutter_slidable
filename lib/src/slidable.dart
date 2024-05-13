@@ -254,11 +254,11 @@ class _SlidableState extends State<Slidable>
         controller: controller,
         child: Padding(
           padding: EdgeInsets.only(
-            right: controller.startActionPaneExtentRatio > 0 &&
+            left: controller.startActionPaneExtentRatio > 0 &&
                     controller.direction.value.abs() > 0
                 ? widget.spaceBetweenContentAndActionPane ?? 0
                 : 0,
-            left: controller.endActionPaneExtentRatio > 0 &&
+            right: controller.endActionPaneExtentRatio > 0 &&
                     controller.direction.value.abs() > 0
                 ? widget.spaceBetweenContentAndActionPane ?? 0
                 : 0,
