@@ -283,6 +283,7 @@ class _SlidableState extends State<Slidable>
             bottom: widget.padding?.bottom,
             child: ClipRect(
               clipper: _SlidableClipper(
+                padding: widget.padding,
                 axis: widget.direction,
                 controller: controller,
               ),
@@ -346,10 +347,12 @@ class _SlidableClipper extends CustomClipper<Rect> {
   _SlidableClipper({
     required this.axis,
     required this.controller,
+    this.padding,
   }) : super(reclip: controller.animation);
 
   final Axis axis;
   final SlidableController controller;
+  final EdgeInsets? padding;
 
   @override
   Rect getClip(Size size) {
@@ -357,9 +360,14 @@ class _SlidableClipper extends CustomClipper<Rect> {
       case Axis.horizontal:
         final double offset = controller.ratio * size.width;
         if (offset < 0) {
-          return Rect.fromLTRB(size.width + offset, 0, size.width, size.height);
+          return Rect.fromLTRB(
+            size.width + offset - (padding?.left ?? 0),
+            0,
+            size.width,
+            size.height,
+          );
         }
-        return Rect.fromLTRB(0, 0, offset, size.height);
+        return Rect.fromLTRB(padding?.left ?? 0, 0, offset, size.height);
       case Axis.vertical:
         final double offset = controller.ratio * size.height;
         if (offset < 0) {
