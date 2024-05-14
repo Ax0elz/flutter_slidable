@@ -361,7 +361,7 @@ class _SlidableClipper extends CustomClipper<Rect> {
         final double offset = controller.ratio * size.width;
         if (offset < 0) {
           return Rect.fromLTRB(
-            size.width + offset - (padding?.left ?? 0),
+            size.width + offset - (padding?.right ?? 0),
             0,
             size.width,
             size.height,
